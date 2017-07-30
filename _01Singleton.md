@@ -126,7 +126,95 @@ class Singleton
 }
 ```
 
-* 注：还有需要传参的的构造函数
+### 带有参数的构造器
+
+```C#
+public class Singleton
+{
+	private static Singleton instance;
+	private Singleton(int x, int y)
+	{
+		this.x = x;
+		this.y = y;
+	}
+	public static Singleton GetInstance(int x, int y)
+	{
+		if(instance == null)
+		{
+			instance = new Singleton(x, y);
+		}
+		return instance;
+	}
+	int x;
+	int y;
+}
+```
+
+* 那么这种方式的单例，只能传一次参数，调用后，就会一直使用这个参数，不能改变为别的参数（因为只能生成一个单例），如果想要使用多次传参的形式就要对单例进行改写，如下：
+
+```C#
+public class Singleton
+{
+	private static Singleton instance;
+	private Singleton(int x, int y)
+	{
+		this.x = x;
+		this.y = y;
+	}
+	public static Singleton GetInstance(int x, int y)
+	{
+		if(instance == null)
+		{
+			instance = new Singleton(x, y);
+		}
+		else
+		{
+			instance.x = x;
+			instance.y = y;
+		}
+		return instance;
+	}
+	int x;
+	int y;
+}
+//这样就可以多次传参 
+```
+
+```C#
+class Singleton
+{
+  private static readonly Singleton Instance = new Singleton();  //只读,不能作传参的构造实例，只能使用无参的
+  private Singleton() {}
+}
+```
+
+由于它本身的静态构造器不允许传参，那么怎么才能让它能实现带有参数呢？可以使用属性的方式
+
+```C#
+class Singleton
+{
+  private static readonly Singleton Instance = new Singleton();  //只读,不能作传参的构造实例，只能使用无参的
+  private Singleton() {}
+  public void Init()   //初始化的处理(可以带有参数)
+  {
+  
+  }
+  int x,y;
+  public int X
+  {
+  	get {return x;}
+	set {x = value;}
+  }
+   public int Y
+  {
+  	get {return y;}
+	set {y = value;}
+  }
+}
+//那么这样呢，就可以对这个单例进行设置值，也就相当于传参了
+```
+
+* 注：灵活应用参数的传递的方法，掌握单例的本质
 
 ## Singleton模式扩展
 
